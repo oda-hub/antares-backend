@@ -1,0 +1,10 @@
+url: 0.0.0.0
+port: 5001
+antares_env_dir: antares_environment
+data_dir: antares_data
+out_dir: antares_output
+bin_dir: antares_bin
+docker_mnt_point : /mnt
+docker_image: 'root-c7'
+mm_exec: multiMessenger
+root_wd:

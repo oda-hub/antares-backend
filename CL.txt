@@ -1,0 +1,5 @@
+#to compile the antares code
+docker run  -v $PWD/antares_environment/:/mnt -it root-c7  bash
+
+#to run a test
+docker run -e DISPLAY=$DISPLAY --volume="$HOME/.Xauthority:/root/.Xauthority:rw" --net=host --volume $PWD/antares_environment/:/mnt -it root-c7  bash -c "/mnt/antares_bin/multiMessenger 23.000000 86.000000 2.000000 3.000000 1.000000 /mnt antares_output 1sdasdasasdsa_ra86.0000002.2_dec23.0000002.2_"
