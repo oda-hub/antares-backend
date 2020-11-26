@@ -19,14 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e970c256-7a0b-4229-bf9b-fb936ed0ce27" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../CL.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../CL.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/antares_data_server/backend_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/antares_data_server/backend_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/antares_data_server/config_dir/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/antares_data_server/config_dir/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/antares_data_server/data_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/antares_data_server/data_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../antares_environment/antares_output/ul_file_test_ra_86.0000002.2_dec_23.0000002.2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../antares_environment/antares_output/ul_file_test_ra_86.0000002.2_dec_23.0000002.2.txt" afterDir="false" />
-    </list>
+    <list default="true" id="e970c256-7a0b-4229-bf9b-fb936ed0ce27" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
