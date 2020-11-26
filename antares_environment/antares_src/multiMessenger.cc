@@ -181,7 +181,7 @@ int main(int argc, char *argv[] ) {
 
   std::string antares_data = root_path + "/antares_data/ANTARES.data";
 
-  ifstream data(antares_data);
+  std::ifstream data(antares_data);
 
   if(!data.is_open()) {
     std::cerr << "ERROR opening input data from ANTARES" << std::endl;
@@ -246,7 +246,7 @@ int main(int argc, char *argv[] ) {
   // read the acceptance table
   std::string antares_acc = root_path + "/antares_data/acc.txt";
   
-  ifstream acceptance(antares_acc);
+  std::ifstream acceptance(antares_acc);
   if(!acceptance.is_open()) {
     std::cerr << "ERROR opening input data for ANTARES effective areas" << std::endl;
     exit(21);
@@ -288,7 +288,7 @@ int main(int argc, char *argv[] ) {
 # schema : astropy −2.0 
 )";
 
-  ofstream outfile;
+  std::ofstream outfile;
 
   outfile.open(out_file_path);
   std::cout << "outfile " << out_file_path << std::endl;
