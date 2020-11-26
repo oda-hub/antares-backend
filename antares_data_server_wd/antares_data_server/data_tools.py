@@ -32,7 +32,6 @@ def get_targets_dic(targets_dic):
 
 
 
-
 class ANTARESTable(object):
 
     def __init__(self,table_object,name='astropy table', meta_data={}):

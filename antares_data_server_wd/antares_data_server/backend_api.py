@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, abort,request,render_template,Response,make_response
-from flask_restplus import Api, Resource,reqparse
+from flask_restx import Api, Resource,reqparse
 from flask.json import JSONEncoder
 from .data_tools import ANTARESTable
 from antares_data_server import conf_dir
@@ -123,7 +123,7 @@ def index():
 
 
 
-@micro_service.route('  /get-ul-table',methods=['GET', 'POST'])
+@micro_service.route('/get-ul-table',methods=['GET', 'POST'])
 def get_ul_table():
     p_dict = get_pars()
     print('->',p_dict)
@@ -353,19 +353,20 @@ def run_antares_analysis(ra,
                          mm_exec='multiMessenger',
                          out_dir='antares_output'):
 
-    root_env=os.path.join(root_wd,antares_env_dir)
+    root_env=os.path.join(root_wd, antares_env_dir)
     print('-> image', image)
-    print('-> root_env',root_env)
+    print('-> root_env', root_env)
     print('-> docker_mnt_point', docker_mnt_point)
 
-    docker_mm_exec=os.path.join(docker_mnt_point,bin_dir,mm_exec)
+    docker_mm_exec=os.path.join(docker_mnt_point, bin_dir, mm_exec)
     print('-> docker_mm_exec', docker_mm_exec)
 
-    exec_cmd='%s %f %f %f %f %f %s %s %s'%(docker_mm_exec,dec, ra, index_min, index_max, roi, docker_mnt_point,out_dir, file_name)
+    exec_cmd='%s %f %f %f %f %f %s %s %s'%(docker_mm_exec, dec, ra, index_min, index_max, roi, docker_mnt_point, out_dir, file_name)
     print('cmd',exec_cmd)
 
     client = docker.from_env()
     c=client.containers.run(image, exec_cmd,volumes={root_env:{'bind':docker_mnt_point,'mode':'rw'}},detach=True)
     res=c.exec_run(exec_cmd)
+
     print(c.logs())
     print('done',res)

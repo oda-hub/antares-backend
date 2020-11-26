@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e970c256-7a0b-4229-bf9b-fb936ed0ce27" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../CL.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../CL.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/antares_data_server/backend_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/antares_data_server/backend_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/antares_data_server/config_dir/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/antares_data_server/config_dir/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/antares_data_server/data_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/antares_data_server/data_tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../antares_environment/antares_output/ul_file_test_ra_86.0000002.2_dec_23.0000002.2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../antares_environment/antares_output/ul_file_test_ra_86.0000002.2_dec_23.0000002.2.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1XlAFE293VvHsM8rryIRSskoj59" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e970c256-7a0b-4229-bf9b-fb936ed0ce27" name="Default Changelist" comment="" />
+      <created>1581610201251</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581610201251</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="507" y="223" key="FileChooserDialogImpl" timestamp="1605797308688">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="507" y="223" key="FileChooserDialogImpl/0.23.1440.877@0.23.1440.877" timestamp="1605797308688" />
+    <state x="229" y="100" key="SettingsEditor" timestamp="1605797346286">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="229" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1605797346286" />
+    <state x="422" y="207" width="596" height="508" key="find.popup" timestamp="1605801116495">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="422" y="207" width="596" height="508" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1605801116495" />
+  </component>
+</project>
