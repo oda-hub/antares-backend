@@ -52,7 +52,7 @@ def output_html(data, code, headers=None):
 
 class Configurer(object):
     def __init__(self, cfg_dict):
-        self._valid=['port','url','antares_env_dir','data_dir','out_dir','bin_dir','docker_mnt_point','docker_image','docker_image','root_wd','mm_exec']
+        self._valid=['port','url','data_dir','out_dir']
         self._validate(cfg_dict)
 
         for k in cfg_dict.keys():
@@ -84,7 +84,7 @@ class Configurer(object):
         return Configurer(cfg_dict)
 
 
-class APIerror(Exception):
+class APIError(Exception):
 
     def __init__(self, message, status_code=None, payload=None):
         Exception.__init__(self)
@@ -190,11 +190,24 @@ def angle_conversion(angle):
 
     return a.to('deg').value
 
+@ns_conf.route('/test-connection')
+class TestConnection(Resource):
+    @api.doc(responses={200: ''},)
+    def get(self):
+        """
+        returns the list of paper ids
+        """
+        config = micro_service.config.get('conf')
+        try:
+            return jsonify(['connection OK'])
+        except Exception as e:
+            #print(e)
+            raise APIError('NO connection =%s'%repr(e), status_code=500)
 
 
 @ns_conf.route('/get-ul-table')
 class AntaresULTable(Resource):
-    @api.doc(responses={410: ''}, params={'ra': 'right ascension',
+    @api.doc(responses={200: ''}, params={'ra': 'right ascension',
                                           'dec':'declination',
                                           'roi':'radius of the roi',
                                           'index_min': 'min photon index',
@@ -237,7 +250,7 @@ class AntaresULTable(Resource):
 
             if not os.path.exists(out_dir):
                 os.makedirs(out_dir)
-                
+
             run_antares_analysis(ra,
                                  dec,
                                  roi,
@@ -250,7 +263,7 @@ class AntaresULTable(Resource):
 
             file_path = get_file_path(file_name,config=config)
 
-            table = ANTARESTable.from_file(file_path=file_path, format='ascii', name='MAGIC TABLE')
+            table = ANTARESTable.from_file(file_path=file_path, format='ascii', name='ANTARES TABLE')
 
             if serialize is True:
 
@@ -263,7 +276,7 @@ class AntaresULTable(Resource):
                 _out=table,file_path
         except Exception as e:
 
-            raise APIerror('UL table error: %s' % e, status_code=410)
+            raise APIError('UL table error: %s' % e, status_code=410)
 
         return _out
 
@@ -276,7 +289,7 @@ def pl_function(energy, pl_index, norm):
 
 @ns_conf.route('/plot-ul-envelope')
 class APIPlotUL(Resource):
-    @api.doc(responses={410: 'error for UL computation'}, params={'file_path': 'table file path'})
+    @api.doc(responses={200: 'plot UL computation'}, params={'file_path': 'table file path'})
     def get(self,render=True,file_path=None):
         """
         returns the plot for a SED table
@@ -320,7 +333,7 @@ class APIPlotUL(Resource):
 
         except Exception as e:
             #print('qui',e)
-            raise APIerror('problem im producing UL plot: %s'%e, status_code=410)
+            raise APIError('problem im producing UL plot: %s' % e, status_code=410)
 
 
 def run_micro_service(conf,debug=False,threaded=False):
