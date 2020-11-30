@@ -290,24 +290,23 @@ def pl_function(energy, pl_index, norm):
 @ns_conf.route('/plot-ul-envelope')
 class APIPlotUL(Resource):
     @api.doc(responses={200: 'plot UL computation'}, params={'file_path': 'table file path'})
-    def get(self,render=True,file_path=None):
+    def get(self,render=True,):
         """
         returns the plot for a SED table
         """
         api_parser = reqparse.RequestParser()
-        if file_path is None:
-            api_parser.add_argument('file_path', required=True, help="the name of the file", type=str)
-            api_args = api_parser.parse_args()
-            file_path = api_args['file_path']
-        else:
-            pass
 
-        print('->',file_path)
+        api_parser.add_argument('file_path', required=True, help="the name of the file", type=str)
+        api_args = api_parser.parse_args()
+        file_path = api_args['file_path']
+
+
+        print('-> APIPlotUL',file_path)
         try:
             size=100
 
             ul_table = ANTARESTable.from_file(file_path=file_path, format='ascii', name='ANTARES TABLE', delimiter=' ').table
-
+            print('-> APIPlotUL', ul_table)
             ul_sed = np.zeros(size)
             e_range = np.logspace(-1, 6, size)
 
