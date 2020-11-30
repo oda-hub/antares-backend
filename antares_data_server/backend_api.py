@@ -3,10 +3,9 @@ from flask_restx import Api, Resource,reqparse
 from flask.json import JSONEncoder
 from .data_tools import ANTARESTable
 from antares_data_server import conf_dir,antares_root_data,antares_exc
-from .plot_tools import ScatterPlot
+
 
 from astropy.coordinates import Angle
-from astropy.units import Unit
 
 import json
 import yaml
@@ -37,17 +36,6 @@ micro_service.json_encoder = CustomJSONEncoder
 api= Api(app=micro_service, version='1.0', title='ANTARES back-end API',
     description='API to extract UL for ANTARES Telescope\n Author: Andrea Tramacere',)
 ns_conf = api.namespace('api/v1.0/antares', description='data access')
-
-
-
-
-def output_html(data, code, headers=None):
-    resp = Response(data, mimetype='text/html', headers=headers)
-    resp.status_code = code
-    return resp
-
-
-
 
 
 class Configurer(object):
@@ -281,58 +269,6 @@ class AntaresULTable(Resource):
         return _out
 
 
-def pl_function(energy, pl_index, norm):
-    return np.power(energy, -pl_index) *  norm
-
-
-
-
-@ns_conf.route('/plot-ul-envelope')
-class APIPlotUL(Resource):
-    @api.doc(responses={200: 'plot UL computation'}, params={'file_path': 'table file path'})
-    def get(self,render=True,):
-        """
-        returns the plot for a SED table
-        """
-        api_parser = reqparse.RequestParser()
-
-        api_parser.add_argument('file_path', required=True, help="the name of the file", type=str)
-        api_args = api_parser.parse_args()
-        file_path = api_args['file_path']
-
-
-        print('-> APIPlotUL',file_path)
-        try:
-            size=100
-
-            ul_table = ANTARESTable.from_file(file_path=file_path, format='ascii', name='ANTARES TABLE', delimiter=' ').table
-            print('-> APIPlotUL', ul_table)
-            ul_sed = np.zeros(size)
-            e_range = np.logspace(-1, 6, size)
-
-            for ID, energy in enumerate(e_range):
-                ul_sed[ID] = np.max(pl_function(energy, ul_table['Index'], ul_table['1GeV_norm']))
-
-            ul_sed =ul_sed*ul_table['1GeV_norm'].unit
-            e_range= e_range*Unit('GeV')
-            ul_sed= ul_sed * e_range  *e_range
-            sp1 = ScatterPlot(w=600, h=400, x_label=str(e_range.unit), y_label=str(ul_sed.unit),
-                              y_axis_type='log', x_axis_type='log',title='UL')
-
-
-
-            sp1.add_errorbar(e_range, ul_sed)
-
-            script, div = sp1.get_html_draw()
-            print('-> s,d',script,div)
-            if render is True:
-                return output_html(render_template("plot.html", script=script, div=div), 200)
-            else:
-                return script, div
-
-        except Exception as e:
-            #print('qui',e)
-            raise APIError('problem im producing UL plot: %s' % e, status_code=410)
 
 
 def run_micro_service(conf,debug=False,threaded=False):
