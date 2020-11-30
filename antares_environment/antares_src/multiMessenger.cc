@@ -181,6 +181,9 @@ int main(int argc, char *argv[] ) {
 
   std::string antares_data = root_path + "/antares_data/ANTARES.data";
 
+  std::cout << "antares_data" << antares_data << std::endl;
+
+
   std::ifstream data(antares_data);
 
   if(!data.is_open()) {
