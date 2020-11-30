@@ -2,7 +2,7 @@ from flask import Flask, jsonify, abort,request,render_template,Response,make_re
 from flask_restx import Api, Resource,reqparse
 from flask.json import JSONEncoder
 from .data_tools import ANTARESTable
-from antares_data_server import conf_dir
+from antares_data_server import conf_dir,antares_root_data,antares_exc
 from .plot_tools import ScatterPlot
 
 from astropy.coordinates import Angle
@@ -10,13 +10,12 @@ from astropy.units import Unit
 
 import json
 import yaml
-import pickle
-import glob
+
 import os
 import  numpy as np
+import subprocess
 
 
-import docker
 
 
 class CustomJSONEncoder(JSONEncoder):
@@ -177,10 +176,8 @@ def get_file_path(file_name,config=None):
     if config is None:
         config = micro_service.config.get('conf')
 
-    antares_env_dir = config.antares_env_dir
-    root_wd = config.root_wd
     out_dir = config.out_dir
-    file_path = os.path.join(root_wd, antares_env_dir,out_dir,file_name)
+    file_path = os.path.join(out_dir,file_name)
 
     return file_path
 
@@ -228,28 +225,27 @@ class AntaresULTable(Resource):
 
             config = micro_service.config.get('conf')
 
-            antares_env_dir=config.antares_env_dir
-            docker_mnt_point = config.docker_mnt_point
-            out_dir = config.out_dir
-            mm_exec = config.mm_exec
-            dk_image = config.docker_image
-            root_wd = config.root_wd
-            bin_dir=config.bin_dir
 
+            out_dir = config.out_dir
+            data_dir = config.data_dir
+            #print('data_dir',data_dir)
+            if data_dir is None:
+                data_dir=antares_root_data
+            #print('data_dir', data_dir)
+            #print('out_dir', out_dir)
             file_name = 'ul_file_%s_ra_%f2.2_dec_%f2.2.txt' % (job_id, ra, dec)
+
+            if not os.path.exists(out_dir):
+                os.makedirs(out_dir)
+                
             run_antares_analysis(ra,
                                  dec,
                                  roi,
                                  index_min,
                                  index_max,
-                                 file_name,
-                                 root_wd,
-                                 antares_env_dir,
-                                 bin_dir,
-                                 docker_mnt_point=docker_mnt_point,
-                                 image=dk_image,
-                                 mm_exec=mm_exec,
-                                 out_dir=out_dir)
+                                 data_dir,
+                                 out_dir,
+                                 file_name)
 
 
             file_path = get_file_path(file_name,config=config)
@@ -272,7 +268,7 @@ class AntaresULTable(Resource):
         return _out
 
 
-def pl_fuction(energy, pl_index, norm):
+def pl_function(energy, pl_index, norm):
     return np.power(energy, -pl_index) *  norm
 
 
@@ -303,7 +299,7 @@ class APIPlotUL(Resource):
             e_range = np.logspace(-1, 6, size)
 
             for ID, energy in enumerate(e_range):
-                ul_sed[ID] = np.max(pl_fuction(energy, ul_table['Index'], ul_table['1GeV_norm']))
+                ul_sed[ID] = np.max(pl_function(energy, ul_table['Index'], ul_table['1GeV_norm']))
 
             ul_sed =ul_sed*ul_table['1GeV_norm'].unit
             e_range= e_range*Unit('GeV')
@@ -343,30 +339,24 @@ def run_antares_analysis(ra,
                          roi,
                          index_min,
                          index_max,
-                         file_name,
-                         root_wd,
-                         antares_env_dir,
-                         bin_dir,
-                         use_docker=True,
-                         docker_mnt_point='/mnt',
-                         image='root-c7',
-                         mm_exec='multiMessenger',
-                         out_dir='antares_output'):
+                         data_dir,
+                         out_dir,
+                         file_name):
 
-    root_env=os.path.join(root_wd, antares_env_dir)
-    print('-> image', image)
-    print('-> root_env', root_env)
-    print('-> docker_mnt_point', docker_mnt_point)
+    #root_env=os.path.join(root_wd, antares_env_dir)
+    #print('-> image', image)
+    #print('-> root_env', root_env)
+    #print('-> docker_mnt_point', docker_mnt_point)
 
-    docker_mm_exec=os.path.join(docker_mnt_point, bin_dir, mm_exec)
-    print('-> docker_mm_exec', docker_mm_exec)
+    #docker_mm_exec=os.path.join(docker_mnt_point, bin_dir, mm_exec)
+    #print('-> docker_mm_exec', docker_mm_exec)
 
-    exec_cmd='%s %f %f %f %f %f %s %s %s'%(docker_mm_exec, dec, ra, index_min, index_max, roi, docker_mnt_point, out_dir, file_name)
+    exec_cmd='%s %f %f %f %f %f %s %s %s'%(antares_exc, dec, ra, index_min, index_max, roi, data_dir, out_dir, file_name)
     print('cmd',exec_cmd)
 
-    client = docker.from_env()
-    c=client.containers.run(image, exec_cmd,volumes={root_env:{'bind':docker_mnt_point,'mode':'rw'}},detach=True)
-    res=c.exec_run(exec_cmd)
+    #client = docker.from_env()
+    #c=client.containers.run(image, exec_cmd,volumes={root_env:{'bind':docker_mnt_point,'mode':'rw'}},detach=True)
+    res=subprocess.check_call(exec_cmd, shell=True)
 
-    print(c.logs())
+    #print(c.logs())
     print('done',res)

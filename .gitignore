@@ -22,5 +22,6 @@ lib64
 notebooks/*
 !notebooks/*ipynb
 !notebooks/data
+antares_src/multiMessenger
 *.gpg
 *.swp

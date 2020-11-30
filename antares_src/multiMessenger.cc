@@ -131,12 +131,12 @@ int main(int argc, char *argv[] ) {
   
   //if (argc == 7)
   //{
-  std::string outDir = argv[7];
+  std::string out_path = argv[7];
   //}
 
   //if (argc == 8)
   //{
-  std::string root_path = argv[6];
+  std::string root_data_path = argv[6];
   //}
 
   //if (argc == 9)
@@ -174,16 +174,13 @@ int main(int argc, char *argv[] ) {
 
   if (err != 0) exit(err);
 
-  std::cout << "root_path " << root_path << std::endl;
-  std::cout << "outDir " << outDir << std::endl;
+  std::cout << "root_data_path " << root_data_path << std::endl;
 
   // read the ANTARES data tracks and store them in an array of vectors. beta, nhit and time not used for the moment
 
-  std::string out_path = root_path + "/" + outDir;
 
-  std::cout << "out_path " << out_path << std::endl;
 
-  std::string antares_data = root_path + "/antares_data/ANTARES.data";
+  std::string antares_data = root_data_path + "/ANTARES.data";
 
   std::cout << "antares_data " << antares_data << std::endl;
 
@@ -251,7 +248,7 @@ int main(int argc, char *argv[] ) {
 
   
   // read the acceptance table
-  std::string antares_acc = root_path + "/antares_data/acc.txt";
+  std::string antares_acc = root_data_path + "/acc.txt";
   
   std::ifstream acceptance(antares_acc);
   if(!acceptance.is_open()) {
@@ -281,7 +278,7 @@ int main(int argc, char *argv[] ) {
   // get the bin value from the input declination and spectral index
   double f_ul;
   
-  std::string out_file_path = root_path + "/" + outDir + "/" + file_name;
+  std::string out_file_path = out_path + "/" + file_name;
 
   const std::string header = R"(# %ECSV 0.9
 # ---
