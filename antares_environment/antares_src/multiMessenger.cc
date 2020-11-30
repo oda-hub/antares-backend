@@ -174,10 +174,14 @@ int main(int argc, char *argv[] ) {
 
   if (err != 0) exit(err);
 
- 
+  std::cout << "root_path" << root_path << std::endl;
+  std::cout << "outDir" << outDir << std::endl;
+
   // read the ANTARES data tracks and store them in an array of vectors. beta, nhit and time not used for the moment
 
   std::string out_path = root_path + "/" + outDir;
+
+  std::cout << "out_path" << out_path << std::endl;
 
   std::string antares_data = root_path + "/antares_data/ANTARES.data";
 
