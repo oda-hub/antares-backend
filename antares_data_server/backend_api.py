@@ -298,7 +298,7 @@ class APIPlotUL(Resource):
         if file_path is None:
             api_parser.add_argument('file_path', required=True, help="the name of the file", type=str)
             api_args = api_parser.parse_args()
-            file_path = api_args['table_file']
+            file_path = api_args['file_path']
         else:
             pass
 
