@@ -1,5 +1,5 @@
 url: 0.0.0.0
-port: 5001
+port: 5002
 antares_env_dir: antares_environment
 data_dir: antares_data
 out_dir: antares_output

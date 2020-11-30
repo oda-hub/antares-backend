@@ -1,0 +1,11 @@
+Metadata-Version: 1.2
+Name: antares-data-server
+Version: 0.0.1
+Summary: A Python Framework for MAGIC high-level data distribution
+Home-page: UNKNOWN
+Author: Andrea Tramacere
+Author-email: andrea.tramacere@unige.ch
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.5

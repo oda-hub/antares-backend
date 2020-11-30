@@ -1,0 +1,13 @@
+MANIFEST.in
+setup.py
+./bin/run_antares_back_end.py
+antares_data_server/__init__.py
+antares_data_server/backend_api.py
+antares_data_server/client_api.py
+antares_data_server/data_tools.py
+antares_data_server/pkg_info.json
+antares_data_server/plot_tools.py
+antares_data_server.egg-info/PKG-INFO
+antares_data_server.egg-info/SOURCES.txt
+antares_data_server.egg-info/dependency_links.txt
+antares_data_server.egg-info/top_level.txt
