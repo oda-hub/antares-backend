@@ -131,17 +131,17 @@ int main(int argc, char *argv[] ) {
   
   //if (argc == 7)
   //{
-  outDir = argv[7];
+  std::string outDir = argv[7];
   //}
 
   //if (argc == 8)
   //{
-  root_path = argv[6];
+  std::string root_path = argv[6];
   //}
 
   //if (argc == 9)
   //{
-  file_name = argv[8];
+  std::string file_name = argv[8];
   //}
 
   if (dec < -80 || dec > 50)
