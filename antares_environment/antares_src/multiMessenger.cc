@@ -123,26 +123,26 @@ int main(int argc, char *argv[] ) {
   Gamma_max = std::stof(argv[4]);
   RoI = std::stof(argv[5]);
 
-  std::string file_name = "antares_ul.txt";
+  //std::string file_name = "antares_ul.txt";
 
-  std::string root_path = "/mnt";
+  //std::string root_path = "/mnt";
 
-  std::string outDir = "antares_output";
+  //std::string outDir = "antares_output";
   
-  if (argc == 7)
-  {
-     outDir = argv[6];
-  }
+  //if (argc == 7)
+  //{
+  outDir = argv[7];
+  //}
 
-  if (argc == 8)
-  {
-    root_path = argv[7];
-  }
+  //if (argc == 8)
+  //{
+  root_path = argv[6];
+  //}
 
-  if (argc == 9)
-  {
-    file_name = argv[8];
-  }
+  //if (argc == 9)
+  //{
+  file_name = argv[8];
+  //}
 
   if (dec < -80 || dec > 50)
   {
@@ -174,18 +174,18 @@ int main(int argc, char *argv[] ) {
 
   if (err != 0) exit(err);
 
-  std::cout << "root_path" << root_path << std::endl;
-  std::cout << "outDir" << outDir << std::endl;
+  std::cout << "root_path " << root_path << std::endl;
+  std::cout << "outDir " << outDir << std::endl;
 
   // read the ANTARES data tracks and store them in an array of vectors. beta, nhit and time not used for the moment
 
   std::string out_path = root_path + "/" + outDir;
 
-  std::cout << "out_path" << out_path << std::endl;
+  std::cout << "out_path " << out_path << std::endl;
 
   std::string antares_data = root_path + "/antares_data/ANTARES.data";
 
-  std::cout << "antares_data" << antares_data << std::endl;
+  std::cout << "antares_data " << antares_data << std::endl;
 
 
   std::ifstream data(antares_data);
