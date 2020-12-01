@@ -307,8 +307,8 @@ int main(int argc, char *argv[] ) {
     
     f_ul = n_ul / vec_acc[bin_gamma][bin_a] * 1e-8; // flux = n_ev/acceptance
    
-    std::cout << Gamma <<" "<<f_ul << std::endl;
-    outfile << Gamma << " " << f_ul << std::endl;
+    //std::cout << Gamma <<" "<<f_ul << std::endl;
+    //outfile << Gamma << " " << f_ul << std::endl;
     
       
 

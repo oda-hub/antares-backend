@@ -1,8 +1,5 @@
 
-from __future__ import absolute_import, division, print_function
-
-from builtins import (open, str, range,
-                      object)
+__author__ = "Andrea Tramacere"
 
 
 from bokeh.layouts import row, widgetbox, gridplot

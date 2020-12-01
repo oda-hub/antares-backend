@@ -1,11 +1,5 @@
-from flask import Flask, jsonify, abort,request,render_template,Response,make_response
-from flask_restx import Api, Resource,reqparse
-from flask.json import JSONEncoder
-from .data_tools import ANTARESTable
-from antares_data_server import conf_dir,antares_root_data,antares_exc
 
-
-from astropy.coordinates import Angle
+__author__ = "Andrea Tramacere"
 
 import json
 import yaml
@@ -13,6 +7,18 @@ import yaml
 import os
 import  numpy as np
 import subprocess
+from astropy.coordinates import Angle
+
+
+
+from flask import Flask, jsonify, abort,request,render_template,Response,make_response
+from flask_restx import Api, Resource,reqparse
+from flask.json import JSONEncoder
+
+from antares_data_server import conf_dir,antares_root_data,antares_exc
+from oda_api.data_products import  ODAAstropyTable
+
+
 
 
 
@@ -26,10 +32,10 @@ class CustomJSONEncoder(JSONEncoder):
         return JSONEncoder.default(self, obj)
 
 
-template_dir =os.path.abspath(os.path.dirname(__file__))+'/templates'
-static_dir=os.path.abspath(os.path.dirname(__file__))+'/static'
+#template_dir =os.path.abspath(os.path.dirname(__file__))+'/templates'
+#static_dir=os.path.abspath(os.path.dirname(__file__))+'/static'
 
-micro_service = Flask("micro_service",template_folder=template_dir,static_folder=static_dir)
+micro_service = Flask("micro_service")
 micro_service.json_encoder = CustomJSONEncoder
 
 
@@ -98,66 +104,6 @@ class APP(Exception):
         self.payload = payload
         print('APP Error Message',message)
 
-
-
-@micro_service.errorhandler(APP)
-def handle_app_error(error):
-    return 'bad request! %s'%error.message, 400
-
-@micro_service.route('/index')
-def index():
-    return render_template("index.html")
-
-
-
-@micro_service.route('/get-ul-table',methods=['GET', 'POST'])
-def get_ul_table():
-    p_dict = get_pars()
-    print('->',p_dict)
-    try:
-        c=AntaresULTable()
-        res=c.get(serialize=True)
-        return res
-
-    except Exception as e:
-        print(e)
-        raise APP('table file is empty/corrupted or missing: %s' % e, status_code=410)
-
-
-@micro_service.route('/plot-ul-envelope',methods=['GET', 'POST'])
-def plot_target():
-    script = None
-    div = None
-    p_dict = get_pars()
-    print('-> pars', p_dict)
-    try:
-        c=AntaresULTable()
-        table,file_path=c.get(serialize=False)
-        print('-->,',table,file_path)
-        c=APIPlotUL()
-        print('-->,', table, file_path)
-        script, div = c.get(render=False,file_path=file_path)
-        resp = make_response('{"test": "ok"}')
-        resp.headers['Content-Type'] = "text/html"
-
-        print('-->,', table, file_path)
-        return Response((script, div), content_type='text/html')
-
-    except Exception as e:
-        print(e)
-        raise APP('Problem with  APIPlotUL: %s' % e, status_code=410)
-
-
-
-def get_pars():
-    p_dict=None
-    if request.method == 'POST':
-        p_dict= request.form
-
-    if request.method == 'GET':
-        p_dict = request.args.to_dict()
-
-    return p_dict
 
 
 def get_file_path(file_name,config=None):
@@ -251,7 +197,7 @@ class AntaresULTable(Resource):
 
             file_path = get_file_path(file_name,config=config)
 
-            table = ANTARESTable.from_file(file_path=file_path, format='ascii', name='ANTARES TABLE')
+            table = ODAAstropyTable.from_file(file_path=file_path, format='ascii', name='ANTARES TABLE',delimiter=' ')
 
             if serialize is True:
 
@@ -291,20 +237,12 @@ def run_antares_analysis(ra,
                          out_dir,
                          file_name):
 
-    #root_env=os.path.join(root_wd, antares_env_dir)
-    #print('-> image', image)
-    #print('-> root_env', root_env)
-    #print('-> docker_mnt_point', docker_mnt_point)
 
-    #docker_mm_exec=os.path.join(docker_mnt_point, bin_dir, mm_exec)
-    #print('-> docker_mm_exec', docker_mm_exec)
 
     exec_cmd='%s %f %f %f %f %f %s %s %s'%(antares_exc, dec, ra, index_min, index_max, roi, data_dir, out_dir, file_name)
     print('cmd',exec_cmd)
 
-    #client = docker.from_env()
-    #c=client.containers.run(image, exec_cmd,volumes={root_env:{'bind':docker_mnt_point,'mode':'rw'}},detach=True)
+
     res=subprocess.check_call(exec_cmd, shell=True)
 
-    #print(c.logs())
     print('done',res)
