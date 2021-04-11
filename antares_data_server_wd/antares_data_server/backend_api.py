@@ -121,7 +121,7 @@ def index():
 
 
 
-@micro_service.route('  /get-ul-table',methods=['GET', 'POST'])
+@micro_service.route('/get-ul-table',methods=['GET', 'POST'])
 def get_ul_table():
     p_dict = get_pars()
     print('->',p_dict)
