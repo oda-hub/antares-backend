@@ -254,7 +254,7 @@ class AntaresULTable(Resource):
 
             file_path = get_file_path(file_name,config=config)
 
-            table = ANTARESTable.from_file(file_path=file_path, format='ascii', name='MAGIC TABLE')
+            table = ANTARESTable.from_file(file_path=file_path, format='ascii', name='ANTARES TABLE')
 
             if serialize is True:
 
