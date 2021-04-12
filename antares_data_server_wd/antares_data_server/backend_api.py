@@ -283,7 +283,7 @@ class APIPlotUL(Resource):
         if file_path is None:
             api_parser.add_argument('file_path', required=True, help="the name of the file", type=str)
             api_args = api_parser.parse_args()
-            file_path = api_args['table_file']
+            file_path = api_args['file_path']
         else:
             pass
 
@@ -346,12 +346,12 @@ def run_antares_analysis(ra,
 
     root_env=os.path.join(root_wd,antares_env_dir)
 
-    path_mm_exec=os.path.join(root_wd,bin_dir,mm_exec)
+    path_mm_exec=os.path.join(root_env,bin_dir,mm_exec)
     print('-> path_mm_exec', path_mm_exec)
 
-    exec_list=[path_mm_exec, dec, ra, index_min, index_max, roi, root_wd, out_dir, file_name]
+    exec_list=[path_mm_exec, f"{dec}", f"{ra}", f"{index_min}", f"{index_max}", f"{roi}", out_dir, root_env, file_name]
     print('cmd',exec_list)
 
-    c = sp.run(exec_list, check=True, stderr=sp.STDOUT, stdout=sp.PIPE)
-    print('done:')
+    c = sp.run(exec_list, stderr=sp.STDOUT, stdout=sp.PIPE)
     print(c.stdout)
+    c.check_returncode() 
