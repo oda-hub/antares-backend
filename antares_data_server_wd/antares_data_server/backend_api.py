@@ -17,6 +17,9 @@ import  numpy as np
 
 import subprocess as sp
 
+from bokeh.embed import file_html
+from bokeh.resources import CDN
+
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.ndarray):
@@ -309,27 +312,28 @@ class APIPlotUL(Resource):
 
             sp1.add_errorbar(e_range, ul_sed)
 
-            script, div = sp1.get_html_draw()
-            print('-> s,d',script,div)
-            if render is True:
-                return output_html(render_template("plot.html", script=script, div=div), 200)
-            else:
-                return script, div
+            # script, div = sp1.get_html_draw()
+            # print('-> s,d',script,div)
+            # if render is True:
+            #     return output_html(render_template("plot.html", script=script, div=div), 200)
+            # else:
+            #     return script, div
+
+            #TODO: deal with render=False
+            return output_html(file_html(sp1.fig, CDN, "antares plot"), 200)
 
         except Exception as e:
             #print('qui',e)
             raise APIerror('problem im producing UL plot: %s'%e, status_code=410)
 
 
-def run_micro_service(conf,debug=False,threaded=False):
-
+def config_micro_service(conf):
     micro_service.config['conf'] = conf
     micro_service.config["JSON_SORT_KEYS"] = False
+    return micro_service
 
-    print(micro_service.config,micro_service.config['conf'])
-
-
-    micro_service.run(host=conf.url,port=conf.port,debug=debug,threaded=threaded)
+def run_micro_service(conf,debug=False,threaded=False):
+    config_micro_service(conf).run(host=conf.url,port=conf.port,debug=debug,threaded=threaded)
 
 
 def run_antares_analysis(ra,
