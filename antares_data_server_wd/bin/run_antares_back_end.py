@@ -84,6 +84,7 @@ def main(argv=None):
             'bind': '%s:%s' % (dispatcher_url, port),
             'workers': 2,
             'threads': 4,
+            'worker-tmp-dir': '/dev/shm', 
             #'worker-connections': 10,
             #'k': 'gevent',
         }
