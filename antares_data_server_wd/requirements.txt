@@ -8,4 +8,3 @@ matplotlib
 numpy
 requests
 Werkzeug==0.16.1
-pyqt

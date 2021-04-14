@@ -1,4 +1,4 @@
-#!/Users/orion/anaconda3/envs/antares-backend/bin/python
+#!/usr/bin/env python
 
 
 # -*- encoding: utf-8 -*-
@@ -20,7 +20,7 @@ import gunicorn.app.base
 
 #from gunicorn.six import iteritems
 
-from antares_data_server.backend_api import run_micro_service, micro_service
+from antares_data_server.backend_api import config_micro_service, run_micro_service, micro_service
 
 from antares_data_server import conf_dir
 from antares_data_server.backend_api import Configurer
@@ -33,29 +33,20 @@ def number_of_workers():
 
 
 class StandaloneApplication(gunicorn.app.base.BaseApplication):
-    def __init__(self, app, app_runner,options=None, app_conf=None):
+    def __init__(self, app, options=None, app_conf=None):
         self.options = options or {}
         self.application = app
         self.app_conf = app_conf
-        self.app_runner = app_runner
         super(StandaloneApplication, self).__init__()
 
-    #def load_config(self):
-    #    print('--> using loda_config')
-    #   config = dict([(key, value) for key, value in iteritems(self.options)
-    #                  if key in self.cfg.settings and value is not None])
-
-    #    for key, value in iteritems(config):
-    #        print ('conf',key.lower(), value)
-    #           self.cfg.set(key.lower(), value)
+    def load_config(self):
+        config = {key: value for key, value in self.options.items()
+                  if key in self.cfg.settings and value is not None}
+        for key, value in config.items():
+            self.cfg.set(key.lower(), value)
 
     def load(self):
         return self.application
-
-    def run(self, conf, debug=False, threaded=False):
-        self.app_runner(conf, debug=debug, threaded=threaded)
-        #self.application.config_dir['osaconf'] = conf
-        #self.application.run(host=conf.dispatcher_url, port=conf.dispatcher_port, debug=debug, threaded=threaded)
 
 
 def main(argv=None):
@@ -93,10 +84,14 @@ def main(argv=None):
             'bind': '%s:%s' % (dispatcher_url, port),
             'workers': 2,
             'threads': 4,
+            'worker-tmp-dir': '/dev/shm', 
             #'worker-connections': 10,
             #'k': 'gevent',
         }
-        StandaloneApplication(micro_service, run_micro_service, options).run(conf, debug=debug,threaded=True)
+        if debug:
+            options['loglevel'] = 'debug'
+
+        StandaloneApplication(config_micro_service(conf), options).run()
     else:
         run_micro_service(conf, debug=debug, threaded=False)
 

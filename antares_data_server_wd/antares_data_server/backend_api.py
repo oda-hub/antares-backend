@@ -15,9 +15,10 @@ import glob
 import os
 import  numpy as np
 
+import subprocess as sp
 
-import docker
-
+from bokeh.embed import file_html
+from bokeh.resources import CDN
 
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -53,7 +54,7 @@ def output_html(data, code, headers=None):
 
 class Configurer(object):
     def __init__(self, cfg_dict):
-        self._valid=['port','url','antares_env_dir','data_dir','out_dir','bin_dir','docker_mnt_point','docker_image','docker_image','root_wd','mm_exec']
+        self._valid=['port','url','antares_env_dir','data_dir','out_dir','bin_dir','root_wd','mm_exec']
         self._validate(cfg_dict)
 
         for k in cfg_dict.keys():
@@ -123,7 +124,7 @@ def index():
 
 
 
-@micro_service.route('  /get-ul-table',methods=['GET', 'POST'])
+@micro_service.route('/get-ul-table',methods=['GET', 'POST'])
 def get_ul_table():
     p_dict = get_pars()
     print('->',p_dict)
@@ -229,10 +230,8 @@ class AntaresULTable(Resource):
             config = micro_service.config.get('conf')
 
             antares_env_dir=config.antares_env_dir
-            docker_mnt_point = config.docker_mnt_point
             out_dir = config.out_dir
             mm_exec = config.mm_exec
-            dk_image = config.docker_image
             root_wd = config.root_wd
             bin_dir=config.bin_dir
 
@@ -243,11 +242,9 @@ class AntaresULTable(Resource):
                                  index_min,
                                  index_max,
                                  file_name,
-                                 root_wd,
                                  antares_env_dir,
                                  bin_dir,
-                                 docker_mnt_point=docker_mnt_point,
-                                 image=dk_image,
+                                 root_wd=root_wd,
                                  mm_exec=mm_exec,
                                  out_dir=out_dir)
 
@@ -289,7 +286,7 @@ class APIPlotUL(Resource):
         if file_path is None:
             api_parser.add_argument('file_path', required=True, help="the name of the file", type=str)
             api_args = api_parser.parse_args()
-            file_path = api_args['table_file']
+            file_path = api_args['file_path']
         else:
             pass
 
@@ -315,27 +312,28 @@ class APIPlotUL(Resource):
 
             sp1.add_errorbar(e_range, ul_sed)
 
-            script, div = sp1.get_html_draw()
-            print('-> s,d',script,div)
-            if render is True:
-                return output_html(render_template("plot.html", script=script, div=div), 200)
-            else:
-                return script, div
+            # script, div = sp1.get_html_draw()
+            # print('-> s,d',script,div)
+            # if render is True:
+            #     return output_html(render_template("plot.html", script=script, div=div), 200)
+            # else:
+            #     return script, div
+
+            #TODO: deal with render=False
+            return output_html(file_html(sp1.fig, CDN, "antares plot"), 200)
 
         except Exception as e:
             #print('qui',e)
             raise APIerror('problem im producing UL plot: %s'%e, status_code=410)
 
 
-def run_micro_service(conf,debug=False,threaded=False):
-
+def config_micro_service(conf):
     micro_service.config['conf'] = conf
     micro_service.config["JSON_SORT_KEYS"] = False
+    return micro_service
 
-    print(micro_service.config,micro_service.config['conf'])
-
-
-    micro_service.run(host=conf.url,port=conf.port,debug=debug,threaded=threaded)
+def run_micro_service(conf,debug=False,threaded=False):
+    config_micro_service(conf).run(host=conf.url,port=conf.port,debug=debug,threaded=threaded)
 
 
 def run_antares_analysis(ra,
@@ -344,28 +342,20 @@ def run_antares_analysis(ra,
                          index_min,
                          index_max,
                          file_name,
-                         root_wd,
                          antares_env_dir,
                          bin_dir,
-                         use_docker=True,
-                         docker_mnt_point='/mnt',
-                         image='root-c7',
+                         root_wd='/workdir',
                          mm_exec='multiMessenger',
                          out_dir='antares_output'):
 
     root_env=os.path.join(root_wd,antares_env_dir)
-    print('-> image', image)
-    print('-> root_env',root_env)
-    print('-> docker_mnt_point', docker_mnt_point)
 
-    docker_mm_exec=os.path.join(docker_mnt_point,bin_dir,mm_exec)
-    print('-> docker_mm_exec', docker_mm_exec)
+    path_mm_exec=os.path.join(root_env,bin_dir,mm_exec)
+    print('-> path_mm_exec', path_mm_exec)
 
-    exec_cmd='%s %f %f %f %f %f %s %s %s'%(docker_mm_exec,dec, ra, index_min, index_max, roi, docker_mnt_point,out_dir, file_name)
-    print('cmd',exec_cmd)
+    exec_list=[path_mm_exec, f"{dec}", f"{ra}", f"{index_min}", f"{index_max}", f"{roi}", out_dir, root_env, file_name]
+    print('cmd',exec_list)
 
-    client = docker.from_env()
-    c=client.containers.run(image, exec_cmd,volumes={root_env:{'bind':docker_mnt_point,'mode':'rw'}},detach=True)
-    res=c.exec_run(exec_cmd)
-    print(c.logs())
-    print('done',res)
+    c = sp.run(exec_list, stderr=sp.STDOUT, stdout=sp.PIPE)
+    print(c.stdout)
+    c.check_returncode() 

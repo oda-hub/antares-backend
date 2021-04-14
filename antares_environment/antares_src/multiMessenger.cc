@@ -14,10 +14,11 @@
 
 void usage()
 {
-  std::cerr <<  "\n  Usage: multiMessenger <Declination [deg]> <Right Ascension [deg]> <Spectral Index> <Region of Interest Radius [deg]> \n" 
+  std::cerr <<  "\n  Usage: multiMessenger <Declination [deg]> <Right Ascension [deg]> <Spectral Index Min> <Spectral Index Max> <Region of Interest Radius [deg]> [<Output Dir Name>] [<Root Path>] [<Output File Name>]\n" 
 	    <<  "    <Declination> runs from 50 to -80 \n"
 	    <<  "    <Right Ascension> from 0 to 360 \n"
-	    <<  "    <Spectral Index> from 1.5 to 3.0 \n"
+	    <<  "    <Spectral Index Min> from 1.5 to 3.0 \n"
+      <<  "    <Spectral Index Max> from 1.5 to 3.0 \n"
 	    <<  "    <Region of Interest Radius> from 0.1 to 2.5 degrees \n "<<std::endl;
 }
 
@@ -129,17 +130,17 @@ int main(int argc, char *argv[] ) {
 
   std::string outDir = "antares_output";
   
-  if (argc == 7)
+  if (argc > 6)
   {
      outDir = argv[6];
   }
 
-  if (argc == 8)
+  if (argc > 7)
   {
     root_path = argv[7];
   }
 
-  if (argc == 9)
+  if (argc > 8)
   {
     file_name = argv[8];
   }
@@ -184,7 +185,7 @@ int main(int argc, char *argv[] ) {
   std::ifstream data(antares_data);
 
   if(!data.is_open()) {
-    std::cerr << "ERROR opening input data from ANTARES" << std::endl;
+    std::cerr << "ERROR opening input data from ANTARES" + antares_data << std::endl;
     exit(20);
   }
     
