@@ -123,6 +123,9 @@ def handle_app_error(error):
 def index():
     return render_template("index.html")
 
+@micro_service.route('/test-connection')
+def test_connection():
+    return 'OK'
 
 
 @micro_service.route('/get-ul-table',methods=['GET', 'POST'])
