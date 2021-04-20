@@ -23,26 +23,28 @@ void usage()
 }
 
 
-double bkg_evaluation(double decl, double roi)
+double bkg_evaluation(double decl, double roi, double p[7])
 {
   // the background counting rate on the RoI is computed
 
   // parametrised background distribution from the cumulative taken from data
-  const double p0 = 4419.54;
-  const double p1 = 49.0835;
-  const double p2 = -0.381878;
-  const double p3 = -0.00057324;
-  const double p4 = 3.50326e-05;
-  const double p5 = -3.47092e-07;
-  const double p6 = -3.15577e-09;
+  // const double p0 = 4419.54;
+  // const double p1 = 49.0835;
+  // const double p2 = -0.381878;
+  // const double p3 = -0.00057324;
+  // const double p4 = 3.50326e-05;
+  // const double p5 = -3.47092e-07;
+  // const double p6 = -3.15577e-09;
+
+
 
   // define the declination range of interest
   double dec_low = decl - roi;
   double dec_high = decl + roi;
 
   // compute the background rate over the full declination band
-  double bkg_low = p0 + p1*dec_low + p2*dec_low*dec_low + p3*dec_low*dec_low*dec_low + p4*dec_low*dec_low*dec_low*dec_low + p5*dec_low*dec_low*dec_low*dec_low*dec_low + p6*dec_low*dec_low*dec_low*dec_low*dec_low*dec_low;
-  double bkg_high = p0 + p1*dec_high + p2*dec_high*dec_high + p3*dec_high*dec_high*dec_high + p4*dec_high*dec_high*dec_high*dec_high + p5*dec_high*dec_high*dec_high*dec_high*dec_high + p6*dec_high*dec_high*dec_high*dec_high*dec_high*dec_high;
+  double bkg_low = p[0] + p[1]*dec_low + p[2]*dec_low*dec_low + p[3]*dec_low*dec_low*dec_low + p[4]*dec_low*dec_low*dec_low*dec_low + p[5]*dec_low*dec_low*dec_low*dec_low*dec_low + p[6]*dec_low*dec_low*dec_low*dec_low*dec_low*dec_low;
+  double bkg_high = p[0] + p[1]*dec_high + p[2]*dec_high*dec_high + p[3]*dec_high*dec_high*dec_high + p[4]*dec_high*dec_high*dec_high*dec_high + p[5]*dec_high*dec_high*dec_high*dec_high*dec_high + p[6]*dec_high*dec_high*dec_high*dec_high*dec_high*dec_high;
   double bkg_band = bkg_high - bkg_low;
 
   // compute the solid angle of the full declination band
@@ -215,6 +217,26 @@ int main(int argc, char *argv[] ) {
       }
   }
 
+  // read the background evaluation polinomial coefficients from file
+  std::string bkg_data = root_path + "/antares_data/background.txt";
+  
+  std::ifstream bkgdata(bkg_data);
+  
+  if(!bkgdata.is_open()) {
+    std::cerr << "ERROR opening background data from ANTARES" + bkg_data << std::endl;
+    exit(24);
+  }
+
+  double coeff[7];
+
+  for (int i = 0; i < 7; i++) {
+    if (bkgdata) {
+      bkgdata >> coeff[i];
+    } else {
+      std::cerr << "problem reading the ANTARES background coefficients" << std::endl;
+	    exit(25);
+    }
+  }
 
   // set the direction of the input source
 
@@ -225,7 +247,7 @@ int main(int argc, char *argv[] ) {
 
   // now we start doing the cut and count analysis
 
-  double bkg = bkg_evaluation(dec, RoI);
+  double bkg = bkg_evaluation(dec, RoI, coeff);
   int obs = 0; // to count the observed events
 
   counter = 0;  // to loop over the events
