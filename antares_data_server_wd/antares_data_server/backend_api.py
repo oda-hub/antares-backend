@@ -86,6 +86,7 @@ class Configurer(object):
         return Configurer(cfg_dict)
 
 
+# FIXME: duplicate of cdci_data_analysis.analysis.exceptions.APIerror
 class APIerror(Exception):
 
     def __init__(self, message, status_code=None, payload=None):
