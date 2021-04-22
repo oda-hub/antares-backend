@@ -1,6 +1,0 @@
-estimated background: 0.300586
-number of observed events: 0
-flux UL (Norm. @1 GeV) 2.96752e-08 [(GeV cm s)^-1]
-flux LL (Norm. @1 GeV) 0 [(GeV cm s)^-1]
-flux UL (Norm. @100 TeV) 2.96752e-18 [(GeV cm s)^-1]
-flux LL (Norm. @100 TeV) 0 [(GeV cm s)^-1]
