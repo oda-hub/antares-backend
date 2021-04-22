@@ -11,3 +11,4 @@ requests
 #werkzeug==0.16.0
 flask-restx>=0.2.0
 astroquery
+oda-api==1.1.6

@@ -43,7 +43,7 @@ def compile_and_install_software():
     src_path = './antares_src'
 
     # compile the software
-    cmd = "g++ -std=c++11 multiMessenger.cc -o multiMessenger `root-config --cflags --glibs`"
+    cmd = "g++ multiMessenger.cc -o multiMessenger `root-config --cflags --glibs`"
 
     subprocess.check_call(cmd, cwd=src_path, shell=True)
 
@@ -80,7 +80,7 @@ custom_cmdclass = {'install': CustomInstall,
 
 setup(name='antares_data_server',
       version=__version__,
-      description='A Python Framework for MAGIC high-level data distribution',
+      description='A Python Framework for ANTARES high-level data distribution',
       author='Andrea Tramacere',
       author_email='andrea.tramacere@unige.ch',
       scripts=scripts_list,

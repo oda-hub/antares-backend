@@ -11,12 +11,12 @@ from astropy.coordinates import Angle
 
 
 
-from flask import Flask, jsonify, abort,request,render_template,Response,make_response
+from flask import Flask, jsonify
 from flask_restx import Api, Resource,reqparse
 from flask.json import JSONEncoder
 
 from antares_data_server import conf_dir,antares_root_data,antares_exc
-from oda_api.data_products import  ODAAstropyTable
+from oda_api.data_products import ODAAstropyTable
 
 
 
@@ -128,9 +128,6 @@ def angle_conversion(angle):
 class TestConnection(Resource):
     @api.doc(responses={200: ''},)
     def get(self):
-        """
-        returns the list of paper ids
-        """
         config = micro_service.config.get('conf')
         try:
             return jsonify(['connection OK'])
@@ -215,15 +212,15 @@ class AntaresULTable(Resource):
         return _out
 
 
-
-
-def run_micro_service(conf,debug=False,threaded=False):
-
+def config_micro_service(conf):
     micro_service.config['conf'] = conf
     micro_service.config["JSON_SORT_KEYS"] = False
 
     print(micro_service.config,micro_service.config['conf'])
+    return micro_service
 
+def run_micro_service(conf,debug=False,threaded=False):
+    config_micro_service(conf)
 
     micro_service.run(host=conf.url,port=conf.port,debug=debug,threaded=threaded)
 

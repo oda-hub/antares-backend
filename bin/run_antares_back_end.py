@@ -20,7 +20,7 @@ import gunicorn.app.base
 
 #from gunicorn.six import iteritems
 
-from antares_data_server.backend_api import config_micro_service, run_micro_service, micro_service
+from antares_data_server.backend_api import config_micro_service, run_micro_service
 
 from antares_data_server import conf_dir
 from antares_data_server.backend_api import Configurer
