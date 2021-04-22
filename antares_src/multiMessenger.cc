@@ -123,26 +123,26 @@ int main(int argc, char *argv[] ) {
   Gamma_max = std::stof(argv[4]);
   RoI = std::stof(argv[5]);
 
-  std::string file_name = "antares_ul.txt";
+  //std::string file_name = "antares_ul.txt";
 
-  std::string root_path = "/mnt";
+  //std::string root_path = "/mnt";
 
-  std::string outDir = "antares_output";
+  //std::string outDir = "antares_output";
   
-  if (argc == 7)
-  {
-     outDir = argv[6];
-  }
+  //if (argc == 7)
+  //{
+  std::string out_path = argv[7];
+  //}
 
-  if (argc == 8)
-  {
-    root_path = argv[7];
-  }
+  //if (argc == 8)
+  //{
+  std::string root_data_path = argv[6];
+  //}
 
-  if (argc == 9)
-  {
-    file_name = argv[8];
-  }
+  //if (argc == 9)
+  //{
+  std::string file_name = argv[8];
+  //}
 
   if (dec < -80 || dec > 50)
   {
@@ -174,12 +174,16 @@ int main(int argc, char *argv[] ) {
 
   if (err != 0) exit(err);
 
- 
+  std::cout << "root_data_path " << root_data_path << std::endl;
+
   // read the ANTARES data tracks and store them in an array of vectors. beta, nhit and time not used for the moment
 
-  std::string out_path = root_path + "/" + outDir;
 
-  std::string antares_data = root_path + "/antares_data/ANTARES.data";
+
+  std::string antares_data = root_data_path + "/ANTARES.data";
+
+  std::cout << "antares_data " << antares_data << std::endl;
+
 
   std::ifstream data(antares_data);
 
@@ -244,7 +248,7 @@ int main(int argc, char *argv[] ) {
 
   
   // read the acceptance table
-  std::string antares_acc = root_path + "/antares_data/acc.txt";
+  std::string antares_acc = root_data_path + "/acc.txt";
   
   std::ifstream acceptance(antares_acc);
   if(!acceptance.is_open()) {
@@ -274,7 +278,7 @@ int main(int argc, char *argv[] ) {
   // get the bin value from the input declination and spectral index
   double f_ul;
   
-  std::string out_file_path = root_path + "/" + outDir + "/" + file_name;
+  std::string out_file_path = out_path + "/" + file_name;
 
   const std::string header = R"(# %ECSV 0.9
 # ---
@@ -303,7 +307,7 @@ int main(int argc, char *argv[] ) {
     
     f_ul = n_ul / vec_acc[bin_gamma][bin_a] * 1e-8; // flux = n_ev/acceptance
    
-    std::cout << Gamma <<" "<<f_ul << std::endl;
+    //std::cout << Gamma <<" "<<f_ul << std::endl;
     outfile << Gamma << " " << f_ul << std::endl;
     
       

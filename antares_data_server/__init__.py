@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function
-
 
 import pkgutil
 import os
@@ -28,3 +26,5 @@ with open(os.path.dirname(__file__) + '/pkg_info.json') as fp:
 __version__=_info['version']
 
 conf_dir=os.path.dirname(__file__)+'/config_dir'
+antares_exc=os.path.dirname(__file__)+'/antares_bin/multiMessenger'
+antares_root_data=os.path.dirname(__file__)+'/antares_data'
