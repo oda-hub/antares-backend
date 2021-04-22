@@ -1,8 +1,0 @@
-url: 0.0.0.0
-port: 8000
-antares_env_dir: antares_environment
-data_dir: antares_data
-out_dir: antares_output
-bin_dir: antares_bin
-mm_exec: multiMessenger
-root_wd: /workdir
