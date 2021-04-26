@@ -25,3 +25,4 @@ notebooks/*
 antares_src/multiMessenger
 *.gpg
 *.swp
+.vscode/*
