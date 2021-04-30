@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 from __future__ import absolute_import, division, print_function
 
@@ -7,10 +8,6 @@ from builtins import (bytes, str, open, super, range,
 __author__ = 'andrea tramacere'
 
 
-
-
-#!/usr/bin/env python
-
 from setuptools import setup, find_packages
 import  glob
 import  json
@@ -19,10 +16,21 @@ import  shutil
 from setuptools.command.install import install
 
 
-f = open("./requirements.txt",'r')
-install_req=f.readlines()
-f.close()
+install_req = [
+    'flask',
+    'astropy',
+    'pyyaml',
+    'gunicorn',
+    'matplotlib',
+    'numpy',
+    'requests',
+    'flask-restx>=0.2.0',
+    'astroquery',
+    'oda-api>=1.1.6'
+]
 
+plotting_req = ['bokeh']
+test_req = ['pytest']
 
 packs=find_packages()
 
@@ -88,7 +96,12 @@ setup(name='antares_data_server',
       packages=packs,
       include_package_data=True,
       cmdclass=custom_cmdclass,
-      python_requires='>=3.5')
+      python_requires='>=3.5',
+      install_requires = install_req,
+      extras_require = {
+          'plot': plotting_req,
+          'test': test_req
+      })
 
 
 
