@@ -29,8 +29,9 @@ install_req = [
     'oda-api>=1.1.6'
 ]
 
-plotting_req = ['bokeh']
+#plotting_req = ['bokeh']
 test_req = ['pytest']
+openkm3_req = ['openkm3 @ git+https://git.km3net.de/open-data/openkm3#egg=openkm3']
 
 packs=find_packages()
 
@@ -101,7 +102,8 @@ setup(name='antares_data_server',
       extras_require = {
           # turned off, unneeded
           # 'plot': plotting_req, 
-          'test': test_req
+          'test': test_req,
+          'dataload': openkm3_req,
       })
 
 
