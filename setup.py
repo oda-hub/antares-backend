@@ -99,7 +99,8 @@ setup(name='antares_data_server',
       python_requires='>=3.5',
       install_requires = install_req,
       extras_require = {
-          'plot': plotting_req,
+          # turned off, unneeded
+          # 'plot': plotting_req, 
           'test': test_req
       })
 
