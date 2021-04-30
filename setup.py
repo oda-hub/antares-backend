@@ -31,7 +31,7 @@ install_req = [
 
 #plotting_req = ['bokeh']
 test_req = ['pytest']
-openkm3_req = ['openkm3 @ git+https://git.km3net.de/open-data/openkm3#egg=openkm3']
+openkm3_req = ['openkm3']
 
 packs=find_packages()
 
@@ -105,6 +105,4 @@ setup(name='antares_data_server',
           'test': test_req,
           'dataload': openkm3_req,
       })
-
-
-
+      
