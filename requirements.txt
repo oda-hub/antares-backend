@@ -1,14 +1,12 @@
 flask
 astropy
-#flask-restplus
 pyyaml
 gunicorn
-bokeh
+#bokeh
 matplotlib
 numpy
 requests
-#pyqt
-#werkzeug==0.16.0
 flask-restx>=0.2.0
 astroquery
 oda-api==1.1.6
+git+https://git.km3net.de/open-data/openkm3#egg=openkm3
