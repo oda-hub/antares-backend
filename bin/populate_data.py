@@ -19,12 +19,12 @@ def main(argv=None):
     conf = Configurer.from_conf_file(conf_file)
 
     if conf.data_dir:
-        os.makedirs(conf.data_dir)
+        os.makedirs(conf.data_dir, exist_ok=True)
     else:
         print('Data directory is not set. Using packaged-in data (2012 dataset)')
         return 
 
-    if os.environ.get('ANTARES_NO_POPULATE', False):
+    if os.environ.get('ANTARES_NO_POPULATE'):
         if (os.path.isfile(os.path.join(conf.data_dir, 'ANTARES.data')) and 
             os.path.isfile(os.path.join(conf.data_dir, 'acc.txt')) and 
             os.path.isfile(os.path.join(conf.data_dir, 'background.txt')) 
