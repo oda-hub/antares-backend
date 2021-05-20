@@ -154,7 +154,7 @@ class AntaresULTable(Resource):
         api_parser.add_argument('roi', required=True, help="ROI size", type=float)
         api_parser.add_argument('index_min', required=True, help="", type=float,default=1.5)
         api_parser.add_argument('index_max', required=True, help="", type=float,default=3.0)
-        api_parser.add_argument('job_id', required=False, help="ROI size", type=str, default='test')
+        api_parser.add_argument('job_id', required=False, help="", type=str, default='unset')
         api_args = api_parser.parse_args()
 
 
@@ -177,7 +177,7 @@ class AntaresULTable(Resource):
                 data_dir=antares_root_data
             #print('data_dir', data_dir)
             #print('out_dir', out_dir)
-            file_name = 'ul_file_%s_ra_%f2.2_dec_%f2.2.txt' % (job_id, ra, dec)
+            file_name = 'ant_ul_ra%.2f_dec%.2f_roi%.1f_job%s.txt' % (ra, dec, roi, job_id)
 
             if not os.path.exists(out_dir):
                 os.makedirs(out_dir)
