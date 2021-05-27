@@ -326,8 +326,8 @@ int main(int argc, char *argv[] ) {
   for (int i_ul = 0; i_ul < n_index; i_ul++)
   {
     Gamma = Gamma_min+((Gamma_max - Gamma_min) / double(n_index)) * double(i_ul + 1.0);
-    int bin_a = (int)(std::sin(dec * 3.14159 / 180) + 1) * 10;
-    int bin_gamma = (int)(Gamma * 10) - 15;
+    int bin_a = (int)( (std::sin(dec * 3.14159 / 180) + 1) * 10 );
+    int bin_gamma = (int)( (Gamma * 10) - 15 );
     
     f_ul = n_ul / vec_acc[bin_gamma][bin_a] * 1e-8; // flux = n_ev/acceptance
    
