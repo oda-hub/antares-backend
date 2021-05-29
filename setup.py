@@ -13,8 +13,10 @@ import  glob
 import  json
 import subprocess
 import  shutil
-from setuptools.command.install import install
+from setuptools.command.install import install as StInstall
+from setuptools.command.develop import develop as StDevelop
 
+import sys
 
 install_req = [
     'flask',
@@ -48,24 +50,32 @@ include_package_data=True
 scripts_list=glob.glob('./bin/*')
 
 def compile_and_install_software():
+    print("Here we are!")
     """Used the subprocess module to compile/install the C software."""
     src_path = './antares_src'
 
     # compile the software
     cmd = "g++ multiMessenger.cc -o multiMessenger `root-config --cflags --glibs`"
 
-    subprocess.check_call(cmd, cwd=src_path, shell=True)
-
+    subprocess.check_call(cmd, cwd=src_path, shell=True, stderr=sys.stderr, stdout=sys.stdout)
+    
     src_path='./'
-    subprocess.check_call('cp antares_src/multiMessenger antares_data_server/antares_bin', cwd=src_path, shell=True)
+    subprocess.check_call('cp antares_src/multiMessenger antares_data_server/antares_bin', cwd=src_path, shell=True, stderr=sys.stderr, stdout=sys.stdout)
+    
 
-class CustomInstall(install):
+class CustomInstall(StInstall):
     """Custom handler for the 'install' command."""
     def run(self):
         compile_and_install_software()
         super().run()
 
-class CustomClean(install):
+class CustomDevelop(StDevelop):
+    """Custom handler for the 'install' command."""
+    def run(self):
+        compile_and_install_software()
+        super().run()
+
+class CustomClean(StInstall):
     def run(self):
 
 
@@ -85,6 +95,7 @@ class CustomClean(install):
 
 
 custom_cmdclass = {'install': CustomInstall,
+                   'develop': CustomDevelop,
                    'clean':CustomClean}
 
 setup(name='antares_data_server',
