@@ -6,22 +6,16 @@ import yaml
 
 import os
 import  numpy as np
-import subprocess
 from astropy.coordinates import Angle
-
-
 
 from flask import Flask, jsonify
 from flask_restx import Api, Resource,reqparse
 from flask.json import JSONEncoder
 
-from antares_data_server import conf_dir,antares_root_data,antares_exc
+from antares_data_server import conf_dir,antares_root_data
 from oda_api.data_products import ODAAstropyTable
 
-
-
-
-
+from .analysis import run_antares_analysis
 
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -104,18 +98,6 @@ class APP(Exception):
         self.payload = payload
         print('APP Error Message',message)
 
-
-
-def get_file_path(file_name,config=None):
-    if config is None:
-        config = micro_service.config.get('conf')
-
-    out_dir = config.out_dir
-    file_path = os.path.join(out_dir,file_name)
-
-    return file_path
-
-
 def angle_conversion(angle):
     try:
         a=Angle(angle)
@@ -182,22 +164,17 @@ class AntaresULTable(Resource):
             if not os.path.exists(out_dir):
                 os.makedirs(out_dir)
 
-            run_antares_analysis(ra,
-                                 dec,
-                                 roi,
-                                 index_min,
-                                 index_max,
-                                 data_dir,
-                                 out_dir,
-                                 file_name)
-
-
-            file_path = get_file_path(file_name,config=config)
-
-            table = ODAAstropyTable.from_file(file_path=file_path, format='ascii', name='ANTARES TABLE',delimiter=' ')
+            table = run_antares_analysis(ra,
+                                         dec,
+                                         roi,
+                                         index_min,
+                                         index_max,
+                                         data_dir,
+                                         out_dir,
+                                         file_name)
+            file_path = os.path.join(out_dir, file_name)
 
             if serialize is True:
-
                 _o_dict = {}
                 _o_dict['astropy_table'] = table.encode(use_binary=False)
                 _o_dict['file_path']=file_path
@@ -225,21 +202,5 @@ def run_micro_service(conf,debug=False,threaded=False):
     micro_service.run(host=conf.url,port=conf.port,debug=debug,threaded=threaded)
 
 
-def run_antares_analysis(ra,
-                         dec,
-                         roi,
-                         index_min,
-                         index_max,
-                         data_dir,
-                         out_dir,
-                         file_name):
 
-
-
-    exec_cmd='%s %f %f %f %f %f %s %s %s'%(antares_exc, dec, ra, index_min, index_max, roi, data_dir, out_dir, file_name)
-    print('cmd',exec_cmd)
-
-
-    res=subprocess.check_call(exec_cmd, shell=True)
-
-    print('done',res)
+    
