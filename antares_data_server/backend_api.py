@@ -164,7 +164,7 @@ class AntaresULTable(Resource):
             if not os.path.exists(out_dir):
                 os.makedirs(out_dir)
 
-            table = run_antares_analysis(ra,
+            ul_table, table = run_antares_analysis(ra,
                                          dec,
                                          roi,
                                          index_min,
@@ -172,16 +172,20 @@ class AntaresULTable(Resource):
                                          data_dir,
                                          out_dir,
                                          file_name)
+            ul_file_path = os.path.join(out_dir, "byind_%s" % file_name)
             file_path = os.path.join(out_dir, file_name)
 
             if serialize is True:
-                _o_dict = {}
-                _o_dict['astropy_table'] = table.encode(use_binary=False)
-                _o_dict['file_path']=file_path
-                _o_dict = json.dumps(_o_dict)
-                _out=jsonify(_o_dict)
+                _o_dict_0 = {}
+                _o_dict_0['astropy_table'] = table.encode(use_binary=False)
+                _o_dict_0['file_path']=file_path
+                _o_dict_1 = {}
+                _o_dict_1['astropy_table'] = ul_table.encode(use_binary=False)
+                _o_dict_1['file_path']=ul_file_path
+                _o_list = json.dumps([_o_dict_0, _o_dict_1])
+                _out=jsonify(_o_list)
             else:
-                _out=table,file_path
+                _out=[(table,file_path), (ul_table,ul_file_path)]
         except Exception as e:
 
             raise APIError('UL table error: %s' % e, status_code=410)

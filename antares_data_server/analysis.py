@@ -58,4 +58,4 @@ def run_antares_analysis(ra,
     
     out_table.write(os.path.join(out_dir, file_name), format='ascii.ecsv')
     
-    return out_table
+    return ul_table_t, out_table
