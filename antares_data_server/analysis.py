@@ -52,7 +52,7 @@ def run_antares_analysis(ra,
     e_range = e_range * Unit('GeV')
     ul_sed = ul_sed * e_range * e_range
     
-    tdat = QTable([e_range, ul_sed], names = ['E', 'flux_UL * E^2'] )
+    tdat = QTable([e_range, ul_sed], names = ['E', 'flux_UL * E^2'], meta=meta_data)
     
     out_table = ODAAstropyTable(tdat, name='Spectra Upper Limit', meta_data=meta_data)
     
