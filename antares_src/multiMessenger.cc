@@ -309,12 +309,8 @@ int main(int argc, char *argv[] ) {
 # datatype:
 # - { name : Index,  datatype : float32, description : photon index }
 # - { name : 1GeV_norm, unit : GeV-1 cm-2 s-1, datatype : float32, description : Energy }
-# meta : !!omap
-# - { RA :  }
-# - { DEC :  }
-# - { ROI :  }
-# schema : astropy −2.0 
-)";
+# schema : astropy −2.0
+# meta : !!omap)";
 
   std::ofstream outfile;
 
@@ -322,6 +318,10 @@ int main(int argc, char *argv[] ) {
   std::cout << "outfile " << out_file_path << std::endl;
   std::cout << "Index 1GeV_norm" << std::endl;
   outfile << header << std::endl;
+  outfile << "# - { RA : " << RA << " }" << std::endl;
+  outfile << "# - { DEC : " << dec << " }" << std::endl;
+  outfile << "# - { RoI : " << RoI << " }" << std::endl;
+
   outfile << "Index 1GeV_norm" << std::endl;
   for (int i_ul = 0; i_ul < n_index; i_ul++)
   {
