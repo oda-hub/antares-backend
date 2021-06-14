@@ -333,10 +333,18 @@ int main(int argc, char *argv[] ) {
     pos_a = pos_a - bin_a;
     pos_gamma = pos_gamma - bin_gamma;
 
-    double acc = ( vec_acc[bin_gamma][bin_a]* (1 - pos_gamma) * (1 - pos_a) 
-          + vec_acc[bin_gamma+1][bin_a]* pos_gamma * (1 - pos_a) 
-          + vec_acc[bin_gamma][bin_a+1]* (1 - pos_gamma) * pos_a 
-          + vec_acc[bin_gamma+1][bin_a+1]* pos_gamma * pos_a );
+    double acc;
+
+    if (bin_gamma == 15) { 
+      // edge case gamma = 3.0
+      acc = ( vec_acc[bin_gamma][bin_a]* (1 - pos_a) 
+                  + vec_acc[bin_gamma][bin_a+1]* pos_a );
+    } else {
+      acc = ( vec_acc[bin_gamma][bin_a]* (1 - pos_gamma) * (1 - pos_a) 
+                  + vec_acc[bin_gamma+1][bin_a]* pos_gamma * (1 - pos_a) 
+                  + vec_acc[bin_gamma][bin_a+1]* (1 - pos_gamma) * pos_a 
+                  + vec_acc[bin_gamma+1][bin_a+1]* pos_gamma * pos_a );
+    }
 
     f_ul = n_ul / acc * 1e-8; // flux = n_ev/acceptance
    
