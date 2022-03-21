@@ -21,7 +21,7 @@ def main(argv=None):
     if conf.data_dir:
         os.makedirs(conf.data_dir, exist_ok=True)
     else:
-        print('Data directory is not set. Using packaged-in data (2012 dataset)')
+        print('Data directory is not set. Using packaged-in data')
         return 
 
     if os.environ.get('ANTARES_NO_POPULATE'):
