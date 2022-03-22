@@ -4,9 +4,10 @@ pyyaml
 gunicorn
 #bokeh
 matplotlib
-numpy
+numpy>=1.18
 requests
 flask-restx>=0.2.0
 astroquery
 oda-api==1.1.6
 git+https://git.km3net.de/open-data/openkm3#egg=openkm3
+MarkupSafe<2.1.0
